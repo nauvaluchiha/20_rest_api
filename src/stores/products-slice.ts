@@ -2,13 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Product } from "@/types/product";
 import { productAPI } from "@/apis/products-api";
 
-type ProductsData = {
+type ProductData = {
   data: Product[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | undefined;
 };
 
-const initialState: ProductsData = {
+const initialState: ProductData = {
   data: [],
   status: "idle",
   error: "",
@@ -16,7 +16,7 @@ const initialState: ProductsData = {
 
 export const getAllProducts = createAsyncThunk("products/getAllProducts", productAPI.getAllProducts);
 
-export const productsData = createSlice({
+export const productData = createSlice({
   name: "products",
   initialState,
   reducers: {},
@@ -26,10 +26,10 @@ export const productsData = createSlice({
     });
     builder.addCase(getAllProducts.fulfilled, (state, action) => {
       let no = 1;
-      const products = action.payload.map((products: { id: string; no: number }) => {
+      const products = action.payload.map((product: { id: string; no: number }) => {
         // product.id = nanoid() redux || uuidv4() uuid;
-        products.no = no++;
-        return products;
+        product.no = no++;
+        return product;
       });
       state.data = products;
       state.status = "succeeded";
@@ -41,8 +41,8 @@ export const productsData = createSlice({
   },
 });
 
-export const selectProducts = (state: { products: ProductsData }) => state.products.data;
-export const productsStatus = (state: { products: ProductsData }) => state.products.status;
-export const productsError = (state: { products: ProductsData }) => state.products.error;
+export const selectProducts = (state: { products: ProductData }) => state.products.data;
+export const productsStatus = (state: { products: ProductData }) => state.products.status;
+export const productsError = (state: { products: ProductData }) => state.products.error;
 
-export default productsData.reducer;
+export default productData.reducer;

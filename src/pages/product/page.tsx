@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Main } from "@/components/main";
 import { ProductForm } from "./components/product-form";
 import { ProductTable } from "./components/product-table";
@@ -6,9 +6,6 @@ import { AddButton } from "./components/ui/add-btn";
 
 export default function Products() {
   const [showForm, setShowForm] = useState(false);
-  useEffect(() => {
-    
-  }, []);    
 
   return (
     <Main>

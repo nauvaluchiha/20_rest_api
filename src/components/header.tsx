@@ -46,7 +46,7 @@ export function Header() {
             id="navbar-default"
           >
             <ul className="font-medium flex flex-col items-center p-4 lg:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-white dark:bg-gray-800 lg:dark:bg-gray-900 dark:border-gray-700">
-              <li className="bg-blue-500 rounded">
+              <li className="bg-blue-500 rounded w-full lg:w-fit">
                 <div className="flex justify-center items-center h-10">
                   <Link
                     to="/"

@@ -1,6 +1,6 @@
+import * as z from "zod";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import * as z from "zod";
 import { formSchema } from "@/validators/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
@@ -84,6 +84,7 @@ export function ProductForm({ dataId, isEditable }: { dataId: string; isEditable
         description: "Your product has been changed",
       });
       dispatch(editProduct(data as unknown as Product));
+      console.log(data)
     }
   }
 

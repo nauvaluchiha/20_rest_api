@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Cell, ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { AppDispatch } from "@/stores/store";
+import { productError, productStatus } from "@/stores/product-slice";
+import { columns } from "./table-column";
+import { Link } from "react-router-dom";
 import {
   selectProducts,
   productsStatus,
   productsError,
   getAllProducts,
 } from "@/stores/products-slice";
-import { Cell, ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { columns } from "./table-column";
 import {
   Table,
   TableBody,
@@ -16,9 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Link } from "react-router-dom";
-import { AppDispatch } from "@/stores/store";
-import { productStatus } from "@/stores/product-slice";
 
 interface CellComponentProps<TData> {
   cell: Cell<TData, unknown>;
@@ -26,38 +26,50 @@ interface CellComponentProps<TData> {
 
 export const ProductTable = React.memo(() => {
   const dispatch = useDispatch<AppDispatch>();
-  const status = useSelector(productsStatus);
-  const statusp = useSelector(productStatus);
-  const error = useSelector(productsError);
+  const statusProducts = useSelector(productsStatus);
+  const statusProduct = useSelector(productStatus);
+  const errorProducts = useSelector(productsError);
+  const errorProduct = useSelector(productError);
 
   useEffect(() => {
     let ignore = false;
     if (!ignore) {
-      if (status === "idle" || statusp === "loading") {
+      if (statusProducts === "idle") {
         dispatch(getAllProducts());
       }
     }
     return () => {
       ignore = true;
     };
-  }, [status, dispatch, statusp]);
+  }, [statusProducts]);
 
-  let tabel;
-  if (status === "loading" || statusp === "loading") {
-    tabel = (
-      <div className="flex justify-center items-center h-48">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  } else if (status === "succeeded") {
-    tabel = <TableComponent />;
-  } else if (status === "failed") {
-    tabel = <div className="text-center py-4 px-2">{error}</div>;
-  }
+  useEffect(() => {
+    let ignore = false;
+    if (!ignore) {
+      if (statusProduct !== "loading") {
+        dispatch(getAllProducts());
+      }
+    }
+    return () => {
+      ignore = true;
+    };
+  }, [statusProduct]);
 
   return (
     <div>
-      <div className="border-[1px] border-black rounded-lg">{tabel}</div>
+      <div className="border-[1px] border-black rounded-lg">
+        {statusProducts === "loading" || statusProduct === "loading" ? (
+          <div className="flex justify-center items-center h-48">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+          </div>
+        ) : statusProducts === "succeeded" ? (
+          <TableComponent />
+        ) : (
+          <div className="text-center py-4 px-2">
+            {errorProduct ? `product error: ${errorProduct}` : errorProducts && `products error: ${errorProducts}`}
+          </div>
+        )}
+      </div>
       <div className="text-center mt-4">
         <h2 className="text-base font-mono">
           <strong>API: </strong>

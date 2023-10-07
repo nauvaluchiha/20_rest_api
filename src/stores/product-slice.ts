@@ -50,14 +50,9 @@ export const productData = createSlice({
       state.status = "loading";
     });
     builder.addCase(editProduct.fulfilled, (state, action) => {
-      const { id, name, category, image, freshness, desc, price } = action.payload;
-      const index = state.data.findIndex((product) => product.id === id);
-      state.data[index].name = name;
-      state.data[index].category = category;
-      state.data[index].image = image;
-      state.data[index].freshness = freshness;
-      state.data[index].desc = desc;
-      state.data[index].price = price;
+      const { id } = action.payload;
+      const index = state.data.findIndex((products) => products.id === id);
+      state.data[index] = action.payload;
       state.status = "succeeded";
     });
     builder.addCase(editProduct.rejected, (state, action) => {
